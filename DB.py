@@ -126,17 +126,24 @@ class Database:
         return self.run_query_in(sql)
     
     def update(self, uid: str, data: dict)->dict:
-        fieldlist = str()
-        for field in self.fields[1:]:
-            if len(fieldlist) > 0:
-                fieldlist += ','+field[0]+"='"+str(data.get(field[0], field[2]))+"'"
-            else:
-                fieldlist += field[0]+"='"+str(data.get(field[0], field[2]))+"'"
+        response = self.response.copy()
+        updater = str()
 
-        sql = f"""UPDATE {self.table} SET {fieldlist}
-                    WHERE uid='{uid}';"""
+        if data:
+            for field in self.fields:
+                dataset = data.get(field[0], None)
+                if dataset:
+                    if len(updater) > 0:
+                        updater += " "+field[0]+"='"+dataset+"'"
+                    else:
+                        updater += field[0]+"='"+dataset+"'"
+            
+            sql = f"UPDATE {self.table} SET {updater} WHERE uid='{uid}';"
+            response = self.run_query_in(sql)
+        else:
+            response["message"] = response["message"]+"No updater was given"
 
-        return self.run_query_in(sql)
+        return response
     
     def delete(self, uid: str)->dict:
         sql = f"DELETE FROM {self.table} WHERE uid='{uid}';"

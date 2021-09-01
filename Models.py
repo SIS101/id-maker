@@ -12,10 +12,20 @@ class StudentsModel(Database):
             ["stid", "INT", 0]
         ]
 
-s = StudentsModel()
+class ProgrammesModel(Database):
+    def __init__(self):
+        Database.__init__(self)
+        self.table = "programmes"
+        self.fields = [
+            ["uid", "varchar(255) PRIMARY KEY NOT NULL", ""],
+            ["name", "varchar(60) NOT NULL", ""],
+            ["code", "varchar(60) UNIQUE NOT NULL", "0"]
+        ]
+
+#s = StudentsModel()
 #print(s.down())
 #print(s.up())
 #print(s.insert({"name": "Shangala", "programme": "PHY"}))
 #print(s.all())
-print(s.find(uid='eb10521c-88d8-44ee-bb54-6375a8de7caf'))
+#print(s.find(uid='eb10521c-88d8-44ee-bb54-6375a8de7caf'))
 #print(s.update('c771724d-33e1-4eaf-80b6-7e23ecf5c21a',{"name": "Shangala", "programme": "PHY"}))
